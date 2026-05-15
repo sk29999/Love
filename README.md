@@ -21,7 +21,7 @@ body{
     height:100vh;
 }
 
-
+/* Старт */
 
 .start{
     position:absolute;
@@ -61,7 +61,7 @@ button:hover{
     font-size:20px;
 }
 
-
+/* Контейнер */
 
 #scene{
     width:100vw;
@@ -70,22 +70,22 @@ button:hover{
     display:none;
 }
 
-
+/* Текст */
 
 .word{
     position:absolute;
-    color:#ff4d88;
-    font-size:12px;
-    font-weight:bold;
+    color:#ff2d55;
+    font-size:20px;
     opacity:0;
     white-space:nowrap;
 
     text-shadow:
-    0 0 5px #ff4d88,
-    0 0 12px #ff4d88,
-    0 0 22px #ff0055;
+    0 0 5px #ff2d55,
+    0 0 10px #ff2d55,
+    0 0 20px #ff2d55,
+    0 0 35px #ff004c;
 
-    animation:show 0.8s forwards;
+    animation:show 1s forwards;
 }
 
 @keyframes show{
@@ -131,25 +131,38 @@ function createHeart(){
     const W = window.innerWidth;
     const H = window.innerHeight;
 
-    // Размер сердца
-    const scale = Math.min(W, H) / 38;
+    const scale = 24;
 
     let points = [];
 
     // Слои сердца
-    const layers = [];
+    const layers = [
+        1,
+        0.95,
+        0.9,
+        0.85,
+        0.8,
+        0.75,
+        0.7,
+        0.65,
+        0.6,
+        0.55,
+        0.5,
+        0.45,
+        0.4,
+        0.35,
+        0.3,
+        0.25,
+        0.2
+    ];
 
-    // Много плотных слоёв
-    for(let i = 1; i >= 0.15; i -= 0.05){
-        layers.push(i);
-    }
-
+    // Создание точек сердца
     layers.forEach((layer, layerIndex) => {
 
-        for(let t = 0; t < Math.PI * 2; t += 0.09){
+        for(let t = 0; t < Math.PI * 2; t += 0.14){
 
             const x =
-            16 * Math.pow(Math.sin(t), 3);
+            16 * Math.pow(Math.sin(t),3);
 
             const y =
             13 * Math.cos(t)
@@ -166,43 +179,19 @@ function createHeart(){
         }
     });
 
-    // Заполнение по кругу
+    // Сортировка ПО КРУГУ
     points.sort((a,b)=>{
 
+        // сначала внешний слой
         if(a.layer !== b.layer){
             return a.layer - b.layer;
         }
 
+        // потом вращение по кругу
         return a.angle - b.angle;
     });
 
-    points.forEach((p,index)=>{
-
-        const el = document.createElement("div");
-
-        el.className = "word";
-
-        // КОРОТКИЙ текст
-        el.innerText = "i love you";
-
-        const px = W/2 + p.x * scale;
-        const py = H/2 - p.y * scale;
-
-        el.style.left = px + "px";
-        el.style.top = py + "px";
-
-        // Быстрое плавное появление
-        el.style.animationDelay =
-        (index * 0.01) + "s";
-
-        scene.appendChild(el);
-    });
-}
-        
-        return a.angle - b.angle;
-    });
-
-    
+    // Плавное заполнение
     points.forEach((p,index)=>{
 
         const el = document.createElement("div");
@@ -216,7 +205,7 @@ function createHeart(){
         el.style.left = px + "px";
         el.style.top = py + "px";
 
-      
+        // Появление по кругу
         el.style.animationDelay =
         (index * 0.015) + "s";
 
